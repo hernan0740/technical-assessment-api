@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Compiled output
+dist/
+
+# Environment variables
+.env
+.env.*
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test coverage
+coverage/
+
+# AWS SAM generated files
+.aws-sam/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
