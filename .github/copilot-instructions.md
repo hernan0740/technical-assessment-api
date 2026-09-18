@@ -6,18 +6,15 @@ This repository contains the backend API for the Technical Assessment Platform.
 
 The application allows users to create technical assessments, create programming questions, execute candidate code, run test cases, calculate scores, and store submissions.
 
-The project is a time-boxed technical Kata. Prioritize a complete, simple, demonstrable MVP over unnecessary architectural complexity.
+This is a time-boxed technical Kata. Prioritize a complete, simple and demonstrable MVP over unnecessary architectural complexity.
 
 ## Technology stack
 
 - Node.js
 - TypeScript
 - Express
-- AWS Lambda
-- API Gateway HTTP API
-- DynamoDB
-- CloudWatch
-- AWS SAM
+- MongoDB Atlas
+- Render
 - Judge0 for code execution
 
 ## Architecture
@@ -57,10 +54,12 @@ Services:
 Persistence:
 - Use the term `Store`, not `Repository`.
 - Example: `AssessmentStore`.
-- DynamoDB implementations should remain replaceable through the Store abstraction.
+- MongoDB implementations must remain behind Store abstractions.
+- Example: `AssessmentStore` → `MongoAssessmentStore`.
+- Keep MongoDB collections and queries simple for the MVP.
 
 Code execution:
-- Candidate code must never execute directly inside the API or Lambda.
+- Candidate code must never execute directly inside the API process.
 - Use a `CodeExecutor` abstraction.
 - Judge0 is the initial implementation through `Judge0Executor`.
 - Do not expose Judge0-specific response contracts directly to the frontend.
@@ -69,14 +68,13 @@ Code execution:
 
 Never:
 - Commit credentials, API keys or secrets.
-- Execute candidate code directly inside Lambda.
+- Execute candidate code directly inside the backend.
 - Expose private test cases to the frontend.
 - Hardcode external service credentials.
-- Grant unnecessary AWS permissions.
 
-Use environment variables or secure AWS configuration for secrets.
+Use environment variables for secrets and external configuration.
 
-Consider execution timeouts and CPU/memory limits when working with code execution.
+Consider execution timeouts and resource limits when working with code execution.
 
 ## TypeScript conventions
 
@@ -92,15 +90,42 @@ Consider execution timeouts and CPU/memory limits when working with code executi
 
 - Build incrementally.
 - Avoid premature optimization.
-- Avoid microservices for the MVP.
-- Keep the backend as a single Lambda application unless a concrete requirement justifies otherwise.
+- Do not introduce microservices for the MVP.
 - Do not introduce libraries without a clear need.
 - Keep external integrations behind small abstractions.
 - Add tests where they provide meaningful value.
 
+## Persistence
+
+MongoDB Atlas is the persistence technology for the MVP.
+
+Initial collections:
+
+- assessments
+- questions
+- submissions
+
+Do not introduce advanced MongoDB patterns, unnecessary indexes or complex data modeling without a concrete requirement.
+
+## Deployment
+
+Backend deployment target:
+
+GitHub
+→ Render
+→ Node.js + Express
+
+Database:
+
+MongoDB Atlas
+
+Code execution:
+
+Judge0
+
 ## Scope
 
-Mandatory execution languages for the MVP:
+Mandatory execution languages:
 
 - Java
 - JavaScript / Node.js
@@ -114,3 +139,5 @@ Possible later additions:
 Do not treat optional features as mandatory MVP requirements.
 
 A custom Copilot Agent may be added later, but should not be created until the application has a functional base.
+
+A `ContainerExecutor` may be evaluated later as a bonus only after the MVP is complete.
