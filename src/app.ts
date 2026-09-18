@@ -1,4 +1,5 @@
 import express from 'express';
+import { assessmentRouter } from './modules/assessment/assessment.routes';
 
 export const app = express();
 
@@ -9,3 +10,5 @@ app.get('/health', (_req, res) => {
     status: 'ok',
   });
 });
+
+app.use('/assessments', assessmentRouter);
