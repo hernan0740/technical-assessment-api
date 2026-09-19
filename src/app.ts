@@ -1,6 +1,7 @@
 import express from 'express';
 import { assessmentRouter } from './modules/assessment/assessment.routes';
 import cors from 'cors';
+import { executionRouter } from './modules/execution/execution.routes';
 
 export const app = express();
 
@@ -19,3 +20,4 @@ app.get('/health', (_req, res) => {
 });
 
 app.use('/assessments', assessmentRouter);
+app.use('/executions', executionRouter);
