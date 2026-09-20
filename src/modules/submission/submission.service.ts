@@ -104,6 +104,7 @@ export class SubmissionService {
         language: input.language,
         sourceCode: input.sourceCode,
         status,
+        timeSpentSeconds: input.timeSpentSeconds,
         passedTests,
         totalTests,
         score,
@@ -160,6 +161,14 @@ export class SubmissionService {
         'Source code is required',
       );
     }
+    if (
+        !Number.isFinite(input.timeSpentSeconds) ||
+        input.timeSpentSeconds < 0
+        ) {
+        throw new SubmissionValidationError(
+            'Time spent must be a valid value',
+        )
+        }
   }
 
   private normalizeOutput(
@@ -186,21 +195,22 @@ export class SubmissionService {
   }
 
   private toSubmissionResult(
-    submission: Submission,
-  ): SubmissionResult {
-    return {
-      id: submission.id,
-      assessmentId: submission.assessmentId,
-      questionId: submission.questionId,
-      candidate: submission.candidate,
-      language: submission.language,
-      status: submission.status,
-      passedTests: submission.passedTests,
-      totalTests: submission.totalTests,
-      score: submission.score,
-      maxScore: submission.maxScore,
-      testResults: submission.testResults,
-      createdAt: submission.createdAt,
-    };
-  }
+  submission: Submission,
+): SubmissionResult {
+  return {
+    id: submission.id,
+    assessmentId: submission.assessmentId,
+    questionId: submission.questionId,
+    candidate: submission.candidate,
+    language: submission.language,
+    status: submission.status,
+    timeSpentSeconds: submission.timeSpentSeconds,
+    passedTests: submission.passedTests,
+    totalTests: submission.totalTests,
+    score: submission.score,
+    maxScore: submission.maxScore,
+    testResults: submission.testResults,
+    createdAt: submission.createdAt,
+  };
+}
 }

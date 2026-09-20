@@ -29,6 +29,7 @@ export interface CreateSubmissionRecordInput {
   candidate: string;
   language: ProgrammingLanguage;
   sourceCode: string;
+  timeSpentSeconds: number
   status: SubmissionStatus;
   passedTests: number;
   totalTests: number;
@@ -50,10 +51,20 @@ export interface SubmissionResult {
   candidate: string;
   language: ProgrammingLanguage;
   status: SubmissionStatus;
+  timeSpentSeconds: number;
   passedTests: number;
   totalTests: number;
   score: number;
   maxScore: number;
   testResults: TestCaseResult[];
   createdAt: Date;
+}
+
+export interface SubmitAnswerInput {
+  assessmentId: string
+  questionId: string
+  candidate: string
+  language: ProgrammingLanguage
+  sourceCode: string
+  timeSpentSeconds: number
 }

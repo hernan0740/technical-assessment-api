@@ -1,27 +1,28 @@
-import { ObjectId, WithId } from 'mongodb';
-import { getDatabase } from '../../infrastructure/database/mongo';
-import { SubmissionStore } from './submission.store';
+import { ObjectId, WithId } from 'mongodb'
+import { getDatabase } from '../../infrastructure/database/mongo'
+import { SubmissionStore } from './submission.store'
 import {
   CreateSubmissionRecordInput,
   Submission,
   SubmissionStatus,
   TestCaseResult,
-} from './submission.types';
-import { ProgrammingLanguage } from '../execution/execution.types';
+} from './submission.types'
+import { ProgrammingLanguage } from '../execution/execution.types'
 
 interface MongoSubmissionDocument {
-  assessmentId: string;
-  questionId: string;
-  candidate: string;
-  language: ProgrammingLanguage;
-  sourceCode: string;
-  status: SubmissionStatus;
-  passedTests: number;
-  totalTests: number;
-  score: number;
-  maxScore: number;
-  testResults: TestCaseResult[];
-  createdAt: Date;
+  assessmentId: string
+  questionId: string
+  candidate: string
+  language: ProgrammingLanguage
+  sourceCode: string
+  timeSpentSeconds: number
+  status: SubmissionStatus
+  passedTests: number
+  totalTests: number
+  score: number
+  maxScore: number
+  testResults: TestCaseResult[]
+  createdAt: Date
 }
 
 export class MongoSubmissionStore
@@ -30,7 +31,7 @@ export class MongoSubmissionStore
   private getCollection() {
     return getDatabase().collection<MongoSubmissionDocument>(
       'submissions',
-    );
+    )
   }
 
   async create(
@@ -39,10 +40,10 @@ export class MongoSubmissionStore
     const document: MongoSubmissionDocument = {
       ...input,
       createdAt: new Date(),
-    };
+    }
 
     const result =
-      await this.getCollection().insertOne(document);
+      await this.getCollection().insertOne(document)
 
     return {
       id: result.insertedId.toHexString(),
@@ -51,6 +52,7 @@ export class MongoSubmissionStore
       candidate: document.candidate,
       language: document.language,
       sourceCode: document.sourceCode,
+      timeSpentSeconds: document.timeSpentSeconds,
       status: document.status,
       passedTests: document.passedTests,
       totalTests: document.totalTests,
@@ -58,23 +60,23 @@ export class MongoSubmissionStore
       maxScore: document.maxScore,
       testResults: document.testResults,
       createdAt: document.createdAt,
-    };
+    }
   }
 
   async findById(
     id: string,
   ): Promise<Submission | null> {
     if (!ObjectId.isValid(id)) {
-      return null;
+      return null
     }
 
     const document = await this.getCollection().findOne({
       _id: new ObjectId(id),
-    });
+    })
 
     return document
       ? this.toSubmission(document)
-      : null;
+      : null
   }
 
   private toSubmission(
@@ -87,6 +89,7 @@ export class MongoSubmissionStore
       candidate: document.candidate,
       language: document.language,
       sourceCode: document.sourceCode,
+      timeSpentSeconds: document.timeSpentSeconds,
       status: document.status,
       passedTests: document.passedTests,
       totalTests: document.totalTests,
@@ -94,6 +97,6 @@ export class MongoSubmissionStore
       maxScore: document.maxScore,
       testResults: document.testResults,
       createdAt: document.createdAt,
-    };
+    }
   }
 }
