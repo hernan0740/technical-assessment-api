@@ -1,46 +1,53 @@
 export type ProgrammingLanguage =
   | 'java'
   | 'javascript'
-  | 'python';
+  | 'python'
 
 export interface TestCase {
-  input: string;
-  expectedOutput: string;
-  isPrivate: boolean;
+  input: string
+  expectedOutput: string
+  isPrivate: boolean
 }
 
 export interface Question {
-  id: string;
-  assessmentId: string;
-  title: string;
-  description: string;
-  allowedLanguages: ProgrammingLanguage[];
-  testCases: TestCase[];
-  score: number;
-  createdAt: Date;
+  id: string
+  assessmentId: string
+  title: string
+  description: string
+  allowedLanguages: ProgrammingLanguage[]
+  testCases: TestCase[]
+  score: number
+  createdAt: Date
 }
 
 export interface CreateQuestionInput {
-  assessmentId: string;
-  title: string;
-  description: string;
-  allowedLanguages: ProgrammingLanguage[];
-  testCases: TestCase[];
-  score: number;
+  assessmentId: string
+  title: string
+  description: string
+  allowedLanguages: ProgrammingLanguage[]
+  testCases: TestCase[]
+  score: number
+}
+
+export interface UpdateQuestionInput {
+  title?: string
+  description?: string
+  allowedLanguages?: ProgrammingLanguage[]
+  score?: number
 }
 
 export interface PublicTestCase {
-  input: string;
-  expectedOutput: string;
+  input: string
+  expectedOutput: string
 }
 
 export interface PublicQuestion {
-  id: string;
-  assessmentId: string;
-  title: string;
-  description: string;
-  allowedLanguages: ProgrammingLanguage[];
-  testCases: PublicTestCase[];
-  score: number;
-  createdAt: Date;
+  id: string
+  assessmentId: string
+  title: string
+  description: string
+  allowedLanguages: ProgrammingLanguage[]
+  testCases: PublicTestCase[]
+  score: number
+  createdAt: Date
 }

@@ -12,9 +12,10 @@ import { SubmissionValidationError } from '../submission.errors'
 
 import type { SubmissionStore } from '../submission.store'
 import type { SubmitAnswerInput } from '../submission.types'
-import { QuestionStore } from '../../question/question.store'
-import { CodeExecutor } from '../../execution/code-executor'
-import { Question } from '../../question/question.types'
+
+import type { QuestionStore } from '../../question/question.store'
+import type { CodeExecutor } from '../../execution/code-executor'
+import type { Question } from '../../question/question.types'
 
 describe('SubmissionService', () => {
   let submissionStore: Mocked<SubmissionStore>
@@ -57,12 +58,17 @@ describe('SubmissionService', () => {
     submissionStore = {
       create: vi.fn(),
       findById: vi.fn(),
+      deleteByQuestionId: vi.fn(),
+      deleteByAssessmentId: vi.fn(),
     }
 
     questionStore = {
       create: vi.fn(),
       findByAssessmentId: vi.fn(),
       findById: vi.fn(),
+      update: vi.fn(),
+      delete: vi.fn(),
+      deleteByAssessmentId: vi.fn(),
     }
 
     codeExecutor = {
@@ -75,7 +81,9 @@ describe('SubmissionService', () => {
       codeExecutor,
     )
 
-    questionStore.findById.mockResolvedValue(question)
+    questionStore.findById.mockResolvedValue(
+      question,
+    )
 
     submissionStore.create.mockImplementation(
       async (submission) => ({
@@ -105,7 +113,8 @@ describe('SubmissionService', () => {
         memory: 1000,
       })
 
-    const result = await service.submit(input)
+    const result =
+      await service.submit(input)
 
     expect(result.status).toBe('PASSED')
     expect(result.passedTests).toBe(2)
@@ -133,7 +142,8 @@ describe('SubmissionService', () => {
         memory: 1000,
       })
 
-    const result = await service.submit(input)
+    const result =
+      await service.submit(input)
 
     expect(result.status).toBe('PARTIAL')
     expect(result.passedTests).toBe(1)
@@ -151,7 +161,8 @@ describe('SubmissionService', () => {
       memory: 1000,
     })
 
-    const result = await service.submit(input)
+    const result =
+      await service.submit(input)
 
     expect(result.status).toBe('FAILED')
     expect(result.passedTests).toBe(0)
@@ -169,7 +180,12 @@ describe('SubmissionService', () => {
       SubmissionValidationError,
     )
 
-    expect(codeExecutor.execute).not.toHaveBeenCalled()
-    expect(submissionStore.create).not.toHaveBeenCalled()
+    expect(
+      codeExecutor.execute,
+    ).not.toHaveBeenCalled()
+
+    expect(
+      submissionStore.create,
+    ).not.toHaveBeenCalled()
   })
 })
