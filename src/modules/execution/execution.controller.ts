@@ -21,6 +21,18 @@ export class ExecutionController {
       const result =
         await this.executionService.run(input);
 
+
+      console.info(
+        JSON.stringify({
+          event: 'execution.result',
+          status: result.status,
+          stdout: result.stdout?.slice(0, 500) ?? '',
+          stderr: result.stderr?.slice(0, 500) ?? '',
+          compileOutput: result.compileOutput?.slice(0, 500) ?? '',
+          timestamp: new Date().toISOString(),
+        }),
+      )
+
       res.status(200).json(result);
     } catch (error) {
       if (error instanceof ExecutionValidationError) {

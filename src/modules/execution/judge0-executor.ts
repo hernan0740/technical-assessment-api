@@ -55,6 +55,14 @@ export class Judge0Executor implements CodeExecutor {
       headers['X-RapidAPI-Host'] = host;
     }
 
+    console.info(
+      JSON.stringify({
+        event: 'judge0.execution.started',
+        language: input.language,
+        timestamp: new Date().toISOString(),
+      }),
+    )
+    
     try {
       const response = await fetch(
         `${apiUrl}/submissions?base64_encoded=false&wait=true`,

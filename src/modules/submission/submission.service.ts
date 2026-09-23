@@ -112,6 +112,17 @@ export class SubmissionService {
         testResults,
       });
 
+        console.info(
+          JSON.stringify({
+            event: 'submission.saved',
+            assessmentId: submission.assessmentId,
+            questionId: submission.questionId,
+            submissionId: submission.id,
+            status: submission.status,
+            score: submission.score,
+          }),
+        )
+
     return this.toSubmissionResult(submission);
   }
 

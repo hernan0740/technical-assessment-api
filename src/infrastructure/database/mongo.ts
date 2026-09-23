@@ -27,7 +27,15 @@ export async function connectToMongo(): Promise<Db> {
 
   await database.command({ ping: 1 });
 
-  console.log('MongoDB connected successfully');
+  await connectToMongo()
+
+  console.info(
+    JSON.stringify({
+      event: 'database.connected',
+      database: 'MongoDB',
+      status: 'SUCCESS',
+    }),
+  )
 
   return database;
 }
